@@ -8,6 +8,7 @@ export const SearchAndFilter = ({
   onSearchChange,
   filterValue,
   onFilterChange,
+  filter = [],
   filterOptions = [],
 }) => {
   return (
@@ -27,15 +28,27 @@ export const SearchAndFilter = ({
         />
       </div>
 
-      {/* 2. Reusable Select Component styled cleanly */}
-      <Select
-        options={filterOptions}
-        value={filterValue}
-        onChange={onFilterChange}
-        icon={ChevronIcon}
-        placeholder="Filter"
-        className="flex items-center !min-w-[110px] !h-[43px] !rounded-[20px] !font-medium border border-[#D4D4D4] !bg-transparent hover:bg-gray-50 focus:outline-none font-montserrat text-sm text-gray-700 cursor-pointer focus:!border-2 focus:!border-primary"
-      />
+      {filter.length > 0 ? (
+        filter.map((filterItem, index) => (
+          <Select
+            key={index}
+            options={filterItem.options}
+            value={filterItem.value}
+            onChange={filterItem.onChange}
+            icon={ChevronIcon}
+            placeholder={filterItem.placeholder}
+          />
+        ))
+      ) : (
+        <Select
+          options={filterOptions}
+          value={filterValue}
+          onChange={onFilterChange}
+          icon={ChevronIcon}
+          placeholder="Filter"
+          className="flex items-center !min-w-[110px] !h-[43px] !rounded-[20px] !font-medium border border-[#D4D4D4] !bg-transparent hover:bg-gray-50 focus:outline-none font-montserrat text-sm text-gray-700 cursor-pointer focus:!border-2 focus:!border-primary"
+        />
+      )}
     </div>
   );
 };

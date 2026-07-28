@@ -1,7 +1,9 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Tooltip } from "@mui/material";
 import { SIDEBAR_ITEMS } from "../../utils/sidebar";
+import apiService from "../../apiservices/ApiServices";
+import Snackbar from "../common/Snackbar";
 
 import Vector from "../../assets/Vector.svg";
 import SidebarSimple from "../../assets/SidebarSimple.svg";
@@ -10,6 +12,12 @@ import FullLogo from "../../assets/Maskgroup.png";
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
 
   const scrollbarStyles = `
     .custom-scrollbar::-webkit-scrollbar {
@@ -34,6 +42,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
     }
   `;
+
+  const handleLogout = async () => {
+    try {
+      const result = await apiService.signOut();
+      const message = "You have been signed out.";
+      console.log("Logout successful:");
+      setSnackbar({ open: true, message, severity: "success" });
+      setTimeout(() => {
+      
+
+        navigate("/login", { replace: true });
+      }, 2000);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setSnackbar({
+        open: true,
+        message: error?.message || "Unable to sign out right now.",
+        severity: "error",
+      });
+    } 
+  };
 
   // Helper function to check if a plural path matches singular detail routes
   const checkIsActive = (itemPath, pathname) => {
@@ -175,9 +204,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               },
             }}>
             <button
-              onClick={() => {
-                console.log("User logged out");
-              }}
+              onClick={handleLogout}
               className={`w-full flex items-center rounded-[12px] px-2.5 py-2 gap-2.5 text-white transition-all hover:bg-white/10 ${
                 isCollapsed ? "justify-center" : ""
               }`}>
@@ -196,6 +223,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           </Tooltip>
         </div>
       </aside>
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+      />
     </>
   );
 };

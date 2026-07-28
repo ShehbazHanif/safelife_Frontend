@@ -43,7 +43,7 @@ const Button = forwardRef(
           </span>
         )}
 
-        <span>{children}</span>
+      
 
         {endIcon && (
           <span className="flex shrink-0 items-center justify-center">

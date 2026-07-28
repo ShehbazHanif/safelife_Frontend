@@ -61,7 +61,7 @@ export const SIDEBAR_ITEMS = [
     },
     {
         path: "/tasks",
-        name: "Tasks",
+        name: "Tickets",
         icon: Task,
         section: null,
     },

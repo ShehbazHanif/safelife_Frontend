@@ -5,8 +5,11 @@ const Select = ({
   value,
   onChange,
   options = [],
+  menuItems,
   optionValue = "value",
   optionLabel = "label",
+  valueKey,
+  labelKey,
   displayEmpty = false,
   renderValue,
   placeholder = "Select",
@@ -16,26 +19,31 @@ const Select = ({
   icon,
   name,
   endIcon, // Added to receive custom action end components if passed
+  sx = {},
 }) => {
+  const selectOptions = menuItems || options;
+  const normalizedValueKey = valueKey || optionValue;
+  const normalizedLabelKey = labelKey || optionLabel;
   const defaultRenderValue = (selected) => {
     if (selected === "" || selected === null || selected === undefined) {
       return <span style={{ color: "#9CA3AF" }}>{placeholder}</span>;
     }
     // Automatically display matching human-readable label if value is selected
-    const selectedOpt = options.find(
-      (opt) => (typeof opt === "string" ? opt : opt[optionValue]) === selected,
+    const selectedOpt = selectOptions.find(
+      (opt) =>
+        (typeof opt === "string" ? opt : opt[normalizedValueKey]) === selected,
     );
     return selectedOpt && typeof selectedOpt !== "string"
-      ? selectedOpt[optionLabel]
+      ? selectedOpt[normalizedLabelKey]
       : selected;
   };
 
   return (
     <MuiSelect
       name={name}
-      value={value || ""}
+      value={value === undefined || value === null ? "" : value}
       onChange={onChange}
-      displayEmpty={true}
+      displayEmpty={displayEmpty || value === "" || value === null || value === undefined}
       renderValue={renderValue || defaultRenderValue}
       disabled={disabled}
       className={className}
@@ -67,10 +75,11 @@ const Select = ({
         "& .MuiOutlinedInput-notchedOutline": { border: "none" },
         "& .MuiSvgIcon-root": { color: "grey" },
         "&.Mui-focused": { borderColor: "var(--Grey-Grey-300, #D8DCDE)" },
+        ...sx,
       }}>
-      {options.map((opt) => {
-        const itemValue = typeof opt === "string" ? opt : opt[optionValue];
-        const itemLabel = typeof opt === "string" ? opt : opt[optionLabel];
+      {selectOptions.map((opt) => {
+        const itemValue = typeof opt === "string" ? opt : opt[normalizedValueKey];
+        const itemLabel = typeof opt === "string" ? opt : opt[normalizedLabelKey];
 
         return (
           <MenuItem

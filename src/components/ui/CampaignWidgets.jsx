@@ -52,7 +52,7 @@ const CampaignWidgets = ({ activeTab }) => {
 
   return (
     /* Parent Div Styling */
-    <div className="flex items-center gap-[16px] self-stretch bg-white ">
+    <div className="flex items-center gap-[16px] self-stretch ">
       {widgets.map((widget, index) => (
         /* Inner Div of Parent Div Styling */
         <div

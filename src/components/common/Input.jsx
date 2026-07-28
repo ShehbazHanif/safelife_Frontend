@@ -20,7 +20,7 @@ export default function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-3 border border-gray-300 rounded-[100px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 ${
+        className={`w-full px-4 py-3 border border-gray-600 rounded-[100px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 ${
           error ? "border-red-500 focus:ring-red-500" : ""
         } ${className}`}
         {...props}
